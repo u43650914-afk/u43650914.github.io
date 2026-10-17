@@ -1,0 +1,3347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>JOJO — Urban Lounge, Specialty Coffee & Restaurant | Казань</title>
+  <meta name="description" content="JOJO в Казани (ул. Чистопольская, 19Г) — современный городской лаунж, specialty-кофейня и ресторан авторской кухни. Звонок в 1 клик и онлайн-выбор стола в 3D." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,600&family=Manrope:wght@300;400;500;600;700&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Строгая палитра JOJO: графит, тёплый беж, кремовый, приглушённый зелёный */
+      --bg-main: #0D0F0E;
+      --bg-secondary: #131614;
+      --bg-card: #191D1B;
+      --bg-card-hover: #202623;
+      --bg-glass: rgba(17, 20, 18, 0.84);
+
+      --text-white: #F7F4EE;
+      --text-cream: #E7DFCF;
+      --text-beige: #C9B39B;
+      --text-muted: #8F8A80;
+
+      --accent-beige: #C9B39B;
+      --accent-beige-light: #E2D2BF;
+      --accent-cream: #F1E9DC;
+      --accent-green: #27382F;
+      --accent-green-mid: #385043;
+      --accent-green-soft: #6E8878;
+
+      --border-subtle: rgba(231, 223, 207, 0.08);
+      --border-hover: rgba(201, 179, 155, 0.32);
+
+      --radius-sm: 14px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+      --radius-pill: 999px;
+
+      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.55);
+      --shadow-card: 0 14px 36px rgba(0, 0, 0, 0.4);
+
+      --font-display: 'Unbounded', sans-serif;
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-main);
+      color: var(--text-white);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-white);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 12% 10%, rgba(39, 56, 47, 0.22) 0%, transparent 42%),
+        radial-gradient(circle at 88% 55%, rgba(201, 179, 155, 0.07) 0%, transparent 48%),
+        radial-gradient(circle at 50% 95%, rgba(39, 56, 47, 0.16) 0%, transparent 45%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    /* Защита всех фото от редактирования, выделения, перетаскивания и системного меню телефона */
+    img {
+      max-width: 100%;
+      display: block;
+      object-fit: cover;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1340px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    .section {
+      padding: 115px 0;
+      position: relative;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 44px;
+    }
+
+    .section-header.row-between {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent-beige);
+      font-weight: 600;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-green-soft);
+      box-shadow: 0 0 12px var(--accent-green-soft);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.9rem, 3.6vw, 2.95rem);
+      font-weight: 500;
+      line-height: 1.16;
+      letter-spacing: -0.02em;
+      color: var(--text-white);
+    }
+
+    .section-title .serif-italic {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.2em;
+      color: var(--accent-beige);
+      padding-right: 4px;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      max-width: 540px;
+      font-size: 1rem;
+    }
+
+    /* Кнопки */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      padding: 16px 32px;
+      border-radius: var(--radius-pill);
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: var(--transition);
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-beige);
+      color: #111312;
+      box-shadow: 0 10px 28px rgba(201, 179, 155, 0.2);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-cream);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 36px rgba(231, 223, 207, 0.28);
+    }
+
+    .btn-secondary {
+      background-color: rgba(231, 223, 207, 0.07);
+      color: var(--text-cream);
+      border: 1px solid rgba(231, 223, 207, 0.2);
+      backdrop-filter: blur(14px);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(231, 223, 207, 0.14);
+      border-color: var(--accent-beige);
+      transform: translateY(-3px);
+    }
+
+    .btn-call-green {
+      background: linear-gradient(135deg, var(--accent-green-mid) 0%, var(--accent-green) 100%);
+      color: var(--text-white);
+      border: 1px solid rgba(110, 136, 120, 0.45);
+      box-shadow: 0 10px 28px rgba(39, 56, 47, 0.45);
+    }
+
+    .btn-call-green:hover {
+      border-color: var(--accent-beige);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 34px rgba(39, 56, 47, 0.65);
+    }
+
+    .call-pulse-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: rgba(247, 244, 238, 0.14);
+      animation: softRing 2.4s infinite ease-in-out;
+    }
+
+    @keyframes softRing {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      15% { transform: rotate(14deg) scale(1.08); }
+      30% { transform: rotate(-10deg) scale(1.08); }
+      45% { transform: rotate(8deg) scale(1.04); }
+      60% { transform: rotate(0deg) scale(1); }
+    }
+
+    /* ==========================================
+       ЕДИНЫЙ СТИЛЬ ПЛАШЕК
+       ========================================== */
+    .filter-pills,
+    .menu-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .menu-tabs {
+      margin-bottom: 40px;
+    }
+
+    .filter-pill,
+    .menu-tab {
+      padding: 11px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      transition: var(--transition);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .filter-pill:hover,
+    .menu-tab:hover {
+      color: var(--text-cream);
+      border-color: var(--border-hover);
+    }
+
+    .filter-pill.active,
+    .menu-tab.active {
+      background-color: var(--accent-green);
+      color: var(--text-white);
+      border-color: var(--accent-green-soft);
+      font-weight: 500;
+      box-shadow: 0 6px 20px rgba(39, 56, 47, 0.45);
+    }
+
+    /* ==========================================
+       НАВИГАЦИЯ (HEADER)
+       ========================================== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 20px 0;
+      transition: var(--transition);
+    }
+
+    .header.scrolled {
+      padding: 13px 0;
+      background-color: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-text {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: var(--text-white);
+    }
+
+    .brand-logo-badge {
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-beige);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background-color: rgba(39, 56, 47, 0.65);
+      border: 1px solid rgba(110, 136, 120, 0.35);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      color: var(--text-cream);
+      opacity: 0.84;
+      position: relative;
+      padding: 4px 0;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: var(--accent-beige);
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+      color: var(--accent-beige);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-phone-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      background-color: rgba(25, 29, 27, 0.8);
+      border: 1px solid rgba(201, 179, 155, 0.22);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-cream);
+    }
+
+    .header-phone-link:hover {
+      border-color: var(--accent-beige);
+      background-color: rgba(39, 56, 47, 0.6);
+      color: var(--text-white);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-green-soft);
+      box-shadow: 0 0 10px var(--accent-green-soft);
+      flex-shrink: 0;
+    }
+
+    .btn-header {
+      padding: 11px 22px;
+      font-size: 0.84rem;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: rgba(231, 223, 207, 0.08);
+      border: 1px solid var(--border-subtle);
+      align-items: center;
+      justify-content: center;
+      color: var(--text-cream);
+    }
+
+    /* ==========================================
+       1, 2, 3. HERO-БЛОК
+       ========================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 130px 0 65px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.04);
+      animation: heroZoom 20s ease-in-out infinite alternate;
+      filter: brightness(0.72) contrast(1.06);
+    }
+
+    @keyframes heroZoom {
+      0% { transform: scale(1.02); }
+      100% { transform: scale(1.1); }
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: 
+        linear-gradient(180deg, rgba(13, 15, 14, 0.78) 0%, rgba(13, 15, 14, 0.42) 45%, rgba(13, 15, 14, 0.98) 100%),
+        radial-gradient(circle at 50% 45%, transparent 10%, rgba(13, 15, 14, 0.7) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: calc(100vh - 195px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 40px;
+      align-items: center;
+      margin: auto 0;
+      padding: 36px 0;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      background-color: rgba(25, 29, 27, 0.76);
+      border: 1px solid rgba(201, 179, 155, 0.25);
+      backdrop-filter: blur(12px);
+      font-size: 0.76rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent-cream);
+      margin-bottom: 24px;
+    }
+
+    .hero-logo-title {
+      font-family: var(--font-display);
+      font-size: clamp(4.4rem, 11.5vw, 9.2rem);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      line-height: 0.94;
+      color: var(--text-white);
+      margin-bottom: 24px;
+      text-shadow: 0 24px 65px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-logo-title span {
+      display: inline-block;
+      color: var(--accent-beige);
+      font-weight: 400;
+    }
+
+    .hero-lead {
+      font-size: clamp(1.06rem, 1.8vw, 1.28rem);
+      color: var(--text-cream);
+      max-width: 610px;
+      font-weight: 300;
+      line-height: 1.65;
+      margin-bottom: 38px;
+    }
+
+    .hero-lead strong {
+      font-weight: 500;
+      color: var(--text-white);
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .hero-lounge-widget {
+      background: rgba(22, 26, 24, 0.78);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid rgba(201, 179, 155, 0.22);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .widget-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .widget-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent-beige);
+    }
+
+    .sound-wave {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 16px;
+    }
+
+    .sound-wave span {
+      width: 3px;
+      background-color: var(--accent-beige);
+      border-radius: 2px;
+      animation: waveBar 1.2s ease-in-out infinite;
+    }
+
+    .sound-wave span:nth-child(1) { height: 6px; animation-delay: 0s; }
+    .sound-wave span:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+    .sound-wave span:nth-child(3) { height: 9px; animation-delay: 0.4s; }
+    .sound-wave span:nth-child(4) { height: 16px; animation-delay: 0.1s; }
+
+    @keyframes waveBar {
+      0%, 100% { transform: scaleY(0.45); opacity: 0.6; }
+      50% { transform: scaleY(1); opacity: 1; }
+    }
+
+    .widget-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .widget-stat-box {
+      background-color: rgba(13, 15, 14, 0.55);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+    }
+
+    .widget-stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .widget-stat-val {
+      font-family: var(--font-display);
+      font-size: 0.96rem;
+      color: var(--text-white);
+      margin-top: 4px;
+    }
+
+    .widget-call-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(39, 56, 47, 0.65) 0%, rgba(25, 29, 27, 0.9) 100%);
+      border: 1px solid rgba(110, 136, 120, 0.4);
+      transition: var(--transition);
+    }
+
+    .widget-call-box:hover {
+      border-color: var(--accent-beige);
+      transform: translateY(-2px);
+    }
+
+    .hero-bottom-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      padding-top: 26px;
+      border-top: 1px solid rgba(231, 223, 207, 0.14);
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-meta-label {
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+    }
+
+    .hero-meta-value {
+      font-size: 0.95rem;
+      color: var(--text-cream);
+      font-weight: 500;
+    }
+
+    /* ==========================================
+       4. РАЗДЕЛ ИНТЕРЬЕРА (ГАЛЕРЕЯ БЕЗ РЕДАКТИРОВАНИЯ ФОТО)
+       ========================================== */
+    .interior-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 360px;
+      gap: 22px;
+    }
+
+    .interior-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      user-select: none;
+    }
+
+    .interior-card.span-7 { grid-column: span 7; }
+    .interior-card.span-5 { grid-column: span 5; }
+
+    .interior-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+      filter: brightness(0.86);
+    }
+
+    .interior-card:hover img {
+      transform: scale(1.04);
+      filter: brightness(0.96);
+    }
+
+    .interior-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 35%, rgba(11, 13, 12, 0.92) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      pointer-events: none;
+    }
+
+    .interior-zone-badge {
+      align-self: flex-start;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-beige);
+      background-color: rgba(13, 15, 14, 0.78);
+      backdrop-filter: blur(8px);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(201, 179, 155, 0.22);
+      margin-bottom: 10px;
+    }
+
+    .interior-card-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text-white);
+      margin-bottom: 4px;
+    }
+
+    .interior-card-desc {
+      font-size: 0.86rem;
+      color: var(--text-cream);
+      opacity: 0.82;
+    }
+
+    /* ==========================================
+       5. РАЗДЕЛ МЕНЮ С КАРТОЧКАМИ БЛЮД
+       ========================================== */
+    .menu-section {
+      background-color: var(--bg-secondary);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .dish-card {
+      position: relative;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      box-shadow: var(--shadow-card);
+    }
+
+    .dish-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(201, 179, 155, 0.09),
+        transparent 45%
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .dish-card:hover::before {
+      opacity: 1;
+    }
+
+    .dish-card:hover {
+      transform: translateY(-7px);
+      border-color: var(--border-hover);
+      background-color: var(--bg-card-hover);
+    }
+
+    .dish-image-wrap {
+      position: relative;
+      height: 245px;
+      overflow: hidden;
+      background-color: #121513;
+      pointer-events: none;
+    }
+
+    .dish-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dish-card:hover .dish-image-wrap img {
+      transform: scale(1.06);
+    }
+
+    .dish-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      padding: 6px 13px;
+      border-radius: var(--radius-pill);
+      font-size: 0.71rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background-color: rgba(13, 15, 14, 0.84);
+      color: var(--accent-cream);
+      border: 1px solid rgba(201, 179, 155, 0.28);
+      backdrop-filter: blur(8px);
+    }
+
+    .dish-badge.green {
+      background-color: rgba(39, 56, 47, 0.9);
+      color: #E3EDE7;
+      border-color: rgba(110, 136, 120, 0.48);
+    }
+
+    .dish-weight {
+      position: absolute;
+      bottom: 14px;
+      right: 16px;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      background-color: rgba(13, 15, 14, 0.8);
+      color: var(--text-beige);
+      backdrop-filter: blur(6px);
+    }
+
+    .dish-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      gap: 18px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .dish-title {
+      font-family: var(--font-display);
+      font-size: 1.04rem;
+      font-weight: 500;
+      color: var(--text-white);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .dish-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .dish-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .dish-price {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--accent-beige);
+    }
+
+    .dish-add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-cream);
+      background-color: rgba(231, 223, 207, 0.06);
+      border: 1px solid var(--border-subtle);
+      transition: var(--transition);
+    }
+
+    .dish-add-btn:hover {
+      background-color: var(--accent-green);
+      border-color: var(--accent-green-soft);
+      color: var(--text-white);
+    }
+
+    .dish-add-btn.added {
+      background-color: var(--accent-green);
+      color: var(--text-white);
+      border-color: var(--accent-green-soft);
+    }
+
+    .preorder-bar {
+      margin-top: 40px;
+      padding: 22px 28px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(90deg, rgba(39, 56, 47, 0.55) 0%, rgba(25, 29, 27, 0.94) 100%);
+      border: 1px solid rgba(110, 136, 120, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .preorder-bar.visible {
+      display: flex;
+    }
+
+    /* ==========================================
+       6. РАЗДЕЛ «О НАС» (БЕЗ СЛОВ КОМАНДЫ JOJO)
+       ========================================== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+      pointer-events: none;
+    }
+
+    .about-main-img {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 560px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .about-main-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-text-block p {
+      color: var(--text-cream);
+      opacity: 0.88;
+      font-size: 1.02rem;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .about-features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .feature-box {
+      padding: 22px;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      transition: var(--transition);
+    }
+
+    .feature-box:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+    }
+
+    .feature-num {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--accent-beige);
+      margin-bottom: 6px;
+    }
+
+    .feature-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-white);
+      margin-bottom: 4px;
+    }
+
+    .feature-text {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================
+       7, 8. КОНТАКТЫ, ПРЯМОЙ ЗВОНОК И КАРТА
+       ========================================== */
+    .contacts-map-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 32px;
+      align-items: stretch;
+    }
+
+    .info-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .contact-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      background-color: rgba(39, 56, 47, 0.5);
+      border: 1px solid rgba(110, 136, 120, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-beige);
+      flex-shrink: 0;
+    }
+
+    .contact-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .contact-val {
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--text-white);
+    }
+
+    .contact-sub {
+      font-size: 0.86rem;
+      color: var(--text-beige);
+      margin-top: 3px;
+    }
+
+    .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    .hours-table td {
+      padding: 6px 0;
+      font-size: 0.92rem;
+      border-bottom: 1px dashed rgba(231, 223, 207, 0.08);
+    }
+
+    .hours-table td:last-child {
+      text-align: right;
+      color: var(--accent-cream);
+      font-weight: 500;
+    }
+
+    .map-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      min-height: 530px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .map-canvas {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background-color: #111413;
+      overflow: hidden;
+    }
+
+    .map-iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 530px;
+      border: 0;
+      filter: grayscale(100%) invert(92%) hue-rotate(145deg) brightness(82%) contrast(115%);
+      opacity: 0.86;
+      transition: opacity 0.4s ease;
+    }
+
+    .map-card:hover .map-iframe {
+      opacity: 1;
+    }
+
+    .map-floating-overlay {
+      position: absolute;
+      bottom: 22px;
+      left: 22px;
+      right: 22px;
+      background-color: rgba(16, 19, 17, 0.93);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(201, 179, 155, 0.25);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      z-index: 5;
+    }
+
+    .map-pin-badge {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .pin-pulse {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: var(--accent-beige);
+      box-shadow: 0 0 0 6px rgba(201, 179, 155, 0.2);
+      animation: pulsePin 2.2s infinite;
+    }
+
+    @keyframes pulsePin {
+      0% { box-shadow: 0 0 0 0 rgba(201, 179, 155, 0.55); }
+      70% { box-shadow: 0 0 0 12px rgba(201, 179, 155, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(201, 179, 155, 0); }
+    }
+
+    .map-route-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .route-chip {
+      padding: 9px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      font-weight: 500;
+      background-color: rgba(231, 223, 207, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-cream);
+    }
+
+    .route-chip:hover {
+      background-color: var(--accent-beige);
+      color: #111312;
+    }
+
+    /* ==========================================
+       ИНТЕРАКТИВНЫЙ ВЫБОР СТОЛА + ЧИСТАЯ 3D-МЕСТНОСТЬ ЗАЛА (БЕЗ ФОТО С МЕСТА)
+       ========================================== */
+    .floorplan-card {
+      margin-top: 36px;
+      background: linear-gradient(145deg, #1A211D 0%, #141715 100%);
+      border: 1px solid rgba(201, 179, 155, 0.22);
+      border-radius: var(--radius-lg);
+      padding: 42px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .floorplan-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      margin-top: 28px;
+      align-items: start;
+    }
+
+    .tables-scheme {
+      background-color: rgba(13, 15, 14, 0.72);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      position: relative;
+    }
+
+    .scheme-window-label {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(201, 179, 155, 0.2);
+    }
+
+    .table-spot {
+      padding: 15px 12px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+    }
+
+    .table-spot:hover {
+      border-color: var(--accent-beige);
+      transform: translateY(-2px);
+    }
+
+    .table-spot.selected {
+      background-color: var(--accent-green);
+      border-color: var(--accent-green-soft);
+      box-shadow: 0 8px 24px rgba(39, 56, 47, 0.6);
+    }
+
+    .table-spot-name {
+      font-family: var(--font-display);
+      font-size: 0.84rem;
+      color: var(--text-white);
+    }
+
+    .table-spot-meta {
+      font-size: 0.74rem;
+      color: var(--text-beige);
+    }
+
+    /* 3D-ВИЗУАЛИЗАТОР МЕСТНОСТИ СТОЛИКА */
+    .hall-3d-wrapper {
+      margin-top: 20px;
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at 50% 35%, rgba(39, 56, 47, 0.42) 0%, rgba(10, 12, 11, 0.96) 78%);
+      border: 1px solid rgba(201, 179, 155, 0.26);
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.75);
+    }
+
+    .hall-3d-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px 18px;
+      background-color: rgba(13, 15, 14, 0.82);
+      border-bottom: 1px solid var(--border-subtle);
+      backdrop-filter: blur(12px);
+      z-index: 6;
+      position: relative;
+    }
+
+    .hall-3d-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent-beige);
+      font-weight: 600;
+    }
+
+    .hall-3d-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hall-3d-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-cream);
+      background-color: rgba(231, 223, 207, 0.08);
+      border: 1px solid var(--border-subtle);
+      transition: var(--transition);
+    }
+
+    .hall-3d-btn:hover {
+      background-color: var(--accent-beige);
+      color: #111312;
+      border-color: var(--accent-beige);
+    }
+
+    .hall-3d-viewport {
+      height: 360px;
+      width: 100%;
+      perspective: 1050px;
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hall-3d-viewport:active {
+      cursor: grabbing;
+    }
+
+    .hall-3d-scene {
+      width: 480px;
+      height: 320px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: rotateX(58deg) rotateZ(-18deg) scale(0.95);
+    }
+
+    .hall-3d-scene.dragging {
+      transition: none;
+    }
+
+    /* Пол зала в 3D */
+    .hall-floor {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      background-color: #141816;
+      background-image: 
+        linear-gradient(rgba(201, 179, 155, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201, 179, 155, 0.06) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(201, 179, 155, 0.12) 0%, transparent 70%);
+      background-size: 32px 32px, 32px 32px, 100% 100%;
+      border: 2px solid rgba(201, 179, 155, 0.3);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.85);
+      transform-style: preserve-3d;
+    }
+
+    /* Панорамные окна (Северная стена) */
+    .hall-wall-window {
+      position: absolute;
+      top: 0;
+      left: 16px;
+      right: 16px;
+      height: 54px;
+      background: linear-gradient(180deg, rgba(201, 179, 155, 0.32) 0%, rgba(39, 56, 47, 0.25) 100%);
+      border: 1px solid rgba(226, 210, 191, 0.45);
+      transform-origin: top center;
+      transform: rotateX(-90deg);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      box-shadow: 0 12px 32px rgba(201, 179, 155, 0.18);
+    }
+
+    .hall-wall-window::after {
+      content: "ПАНОРАМА · УЛ. ЧИСТОПОЛЬСКАЯ, 19Г";
+      font-family: var(--font-display);
+      font-size: 0.56rem;
+      letter-spacing: 0.22em;
+      color: var(--accent-cream);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+    }
+
+    /* Барная станция из камня в 3D */
+    .hall-bar-counter {
+      position: absolute;
+      bottom: 18px;
+      left: 20px;
+      width: 155px;
+      height: 46px;
+      background: linear-gradient(135deg, #3A332C 0%, #24201C 100%);
+      border: 1px solid var(--accent-beige);
+      border-radius: 10px;
+      transform: translateZ(18px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      color: var(--accent-cream);
+      text-transform: uppercase;
+    }
+
+    /* Озеленение в 3D */
+    .hall-plant {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #6E8878 0%, #27382F 80%);
+      border: 1px solid rgba(201, 179, 155, 0.4);
+      transform: translateZ(20px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+    }
+
+    /* 3D-модель столика на сцене */
+    .node-table-3d {
+      position: absolute;
+      width: 96px;
+      height: 68px;
+      border-radius: 14px;
+      background-color: rgba(28, 34, 31, 0.92);
+      border: 1.5px solid rgba(201, 179, 155, 0.32);
+      transform-style: preserve-3d;
+      transform: translateZ(14px);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.65);
+    }
+
+    .node-table-3d:hover {
+      border-color: var(--accent-cream);
+      transform: translateZ(22px);
+    }
+
+    .node-table-3d.active-3d {
+      background: linear-gradient(135deg, #385043 0%, #27382F 100%);
+      border: 2px solid var(--accent-beige);
+      transform: translateZ(30px) scale(1.06);
+      box-shadow: 
+        0 20px 38px rgba(0, 0, 0, 0.85),
+        0 0 30px rgba(201, 179, 155, 0.45);
+    }
+
+    /* Световой конус 2700K над выбранным 3D-столом */
+    .node-table-3d::before {
+      content: "";
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(226, 210, 191, 0.42) 0%, transparent 70%);
+      transform: translateZ(-12px);
+      opacity: 0;
+      transition: opacity 0.45s ease;
+      pointer-events: none;
+    }
+
+    .node-table-3d.active-3d::before {
+      opacity: 1;
+    }
+
+    /* 3D-пин над столом */
+    .table-3d-pin {
+      position: absolute;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background-color: rgba(13, 15, 14, 0.92);
+      border: 1px solid var(--accent-beige);
+      color: var(--text-white);
+      font-family: var(--font-display);
+      font-size: 0.62rem;
+      white-space: nowrap;
+      transform: translateZ(28px) rotateX(-45deg);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.7);
+      pointer-events: none;
+      transition: all 0.45s ease;
+    }
+
+    .node-table-3d.active-3d .table-3d-pin {
+      background-color: var(--accent-beige);
+      color: #111312;
+      font-weight: 700;
+      transform: translateZ(42px) rotateX(-45deg) scale(1.12);
+    }
+
+    .table-3d-sub {
+      font-size: 0.58rem;
+      color: var(--text-beige);
+      margin-top: 18px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Расположение 6 столов на 3D-сцене */
+    .t3d-1 { top: 34px; left: 28px; }
+    .t3d-2 { top: 34px; left: 192px; }
+    .t3d-3 { top: 34px; right: 28px; }
+    .t3d-4 { top: 138px; left: 95px; }
+    .t3d-5 { top: 138px; right: 95px; }
+    .t3d-6 { bottom: 22px; right: 28px; width: 128px; height: 76px; }
+
+    /* Нижняя инфо-панель 3D-местности */
+    .hall-3d-hud {
+      padding: 16px 20px;
+      background-color: rgba(16, 19, 17, 0.94);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      position: relative;
+      z-index: 6;
+    }
+
+    .hud-zone-title {
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      color: var(--text-white);
+    }
+
+    .hud-zone-desc {
+      font-size: 0.8rem;
+      color: var(--text-beige);
+      margin-top: 2px;
+    }
+
+    .hud-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hud-tag {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      background-color: rgba(39, 56, 47, 0.6);
+      border: 1px solid rgba(110, 136, 120, 0.4);
+      color: var(--accent-cream);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .form-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      background-color: rgba(13, 15, 14, 0.8);
+      border: 1px solid rgba(231, 223, 207, 0.14);
+      color: var(--text-white);
+      font-size: 0.94rem;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--accent-beige);
+    }
+
+    /* ==========================================
+       9. НИЖНИЙ ФУТЕР
+       ========================================== */
+    .footer {
+      background-color: #090B0A;
+      border-top: 1px solid var(--border-subtle);
+      padding: 80px 0 45px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 48px;
+      padding-bottom: 56px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .footer-brand-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 340px;
+      margin: 18px 0 26px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.84rem;
+      color: var(--text-cream);
+      transition: var(--transition);
+    }
+
+    .social-btn:hover {
+      background-color: var(--accent-green);
+      color: var(--text-white);
+      border-color: var(--accent-green-soft);
+      transform: translateY(-2px);
+    }
+
+    .footer-col-title {
+      font-family: var(--font-display);
+      font-size: 0.84rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-beige);
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-white);
+    }
+
+    .footer-watermark {
+      font-family: var(--font-display);
+      font-size: clamp(4.2rem, 14vw, 12.5rem);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: rgba(231, 223, 207, 0.03);
+      text-align: center;
+      line-height: 0.85;
+      margin: 36px 0 20px;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================
+       ЭКРАН ТЕЛЕФОННОГО ВЫЗОВА И МОДАЛКИ
+       ========================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 250;
+      background-color: rgba(9, 11, 10, 0.86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 540px;
+      background-color: var(--bg-card);
+      border: 1px solid rgba(201, 179, 155, 0.28);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.35s ease;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop.open .modal-box {
+      transform: translateY(0);
+    }
+
+    .phone-call-card {
+      max-width: 410px;
+      text-align: center;
+      background: radial-gradient(circle at 50% 0%, rgba(56, 80, 67, 0.45) 0%, #151917 70%);
+      border: 1px solid rgba(201, 179, 155, 0.32);
+      padding: 40px 28px 32px;
+    }
+
+    .caller-avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      background-color: var(--accent-green);
+      border: 2px solid var(--accent-beige);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--text-white);
+      position: relative;
+      box-shadow: 0 0 0 12px rgba(201, 179, 155, 0.07), 0 0 0 24px rgba(39, 56, 47, 0.25);
+      animation: callerRing 2s infinite;
+    }
+
+    @keyframes callerRing {
+      0% { box-shadow: 0 0 0 0 rgba(201, 179, 155, 0.35), 0 0 0 0 rgba(39, 56, 47, 0.4); }
+      70% { box-shadow: 0 0 0 16px rgba(201, 179, 155, 0), 0 0 0 32px rgba(39, 56, 47, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(201, 179, 155, 0), 0 0 0 0 rgba(39, 56, 47, 0); }
+    }
+
+    .phone-number-display {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      color: var(--accent-cream);
+      margin: 10px 0 6px;
+      letter-spacing: 0.03em;
+    }
+
+    .call-action-btn-big {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 18px 24px;
+      border-radius: var(--radius-pill);
+      background-color: #355E47;
+      border: 1px solid #6E9980;
+      color: var(--text-white);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 24px;
+      box-shadow: 0 12px 30px rgba(53, 94, 71, 0.45);
+    }
+
+    .call-action-btn-big:hover {
+      background-color: #417256;
+      transform: translateY(-2px);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background-color: rgba(231, 223, 207, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-cream);
+    }
+
+    .mobile-bottom-dock {
+      display: none;
+      position: fixed;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 120;
+      background-color: rgba(18, 22, 20, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(201, 179, 155, 0.28);
+      border-radius: var(--radius-pill);
+      padding: 8px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+      grid-template-columns: 1.15fr 0.9fr 1.15fr;
+      gap: 8px;
+    }
+
+    .dock-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 12px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .dock-call {
+      background-color: var(--accent-green);
+      color: var(--text-white);
+      border: 1px solid var(--accent-green-soft);
+    }
+
+    .dock-menu {
+      background-color: rgba(231, 223, 207, 0.07);
+      color: var(--text-cream);
+    }
+
+    .dock-book {
+      background-color: var(--accent-beige);
+      color: #111312;
+    }
+
+    .toast-notification {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 350;
+      background-color: #1D2822;
+      border: 1px solid var(--accent-beige);
+      color: var(--text-white);
+      padding: 16px 24px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateY(140%);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .toast-notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* МОБИЛЬНОЕ МЕНЮ С КРЕСТИКОМ В ЛЕВОМ ВЕРХНЕМ УГЛУ */
+    .mobile-drawer {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(13, 15, 14, 0.98);
+      backdrop-filter: blur(20px);
+      z-index: 200;
+      padding: 96px 28px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mobile-drawer.open {
+      transform: translateX(0);
+    }
+
+    .mobile-drawer-topbar {
+      position: absolute;
+      top: 20px;
+      left: 28px;
+      right: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Кнопка-крестик в левом верхнем углу */
+    .mobile-drawer-close {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background-color: rgba(231, 223, 207, 0.1);
+      border: 1px solid rgba(201, 179, 155, 0.35);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-white);
+      transition: var(--transition);
+    }
+
+    .mobile-drawer-close:hover,
+    .mobile-drawer-close:active {
+      background-color: var(--accent-beige);
+      color: #111312;
+      transform: rotate(90deg);
+    }
+
+    .mobile-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .mobile-nav-list a {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--text-white);
+    }
+
+    /* ==========================================
+       АДАПТИВНОСТЬ (MOBILE & TABLET)
+       ========================================== */
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .about-grid,
+      .contacts-map-grid,
+      .floorplan-layout {
+        grid-template-columns: 1fr;
+      }
+      .interior-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 300px;
+      }
+      .interior-card.span-7,
+      .interior-card.span-5 {
+        grid-column: span 1;
+      }
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .footer-top {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-bottom: 84px;
+      }
+      .section {
+        padding: 74px 0;
+      }
+      .nav-links,
+      .header-phone-link,
+      .btn-header {
+        display: none;
+      }
+      .mobile-menu-btn {
+        display: inline-flex;
+      }
+      .mobile-bottom-dock {
+        display: grid;
+      }
+      .hero-bottom-bar,
+      .interior-grid,
+      .menu-grid,
+      .footer-top,
+      .about-features {
+        grid-template-columns: 1fr;
+      }
+      .tables-scheme {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hall-3d-viewport {
+        height: 300px;
+      }
+      .hall-3d-scene {
+        transform: rotateX(58deg) rotateZ(-18deg) scale(0.68);
+      }
+      .about-main-img {
+        height: 390px;
+      }
+      .info-card,
+      .floorplan-card,
+      .modal-box {
+        padding: 26px 20px;
+      }
+      .hero-buttons .btn {
+        width: 100%;
+      }
+      .filter-pills,
+      .menu-tabs {
+        gap: 10px;
+      }
+      .filter-pill,
+      .menu-tab {
+        padding: 10px 20px;
+        font-size: 0.86rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       ШАПКА САЙТА (HEADER)
+       ========================================== -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#" class="brand-logo" aria-label="JOJO Казань">
+        <span class="brand-logo-text">JOJO</span>
+        <span class="brand-logo-badge">Kazan</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#interior">Интерьер</a></li>
+        <li><a href="#menu">Меню</a></li>
+        <li><a href="#about">О нас</a></li>
+        <li><a href="#floorplan">Выбор стола</a></li>
+        <li><a href="#contacts">Контакты и карта</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <a href="tel:+79274955535" class="header-phone-link" onclick="triggerPhoneCall(event)">
+          <span class="status-dot"></span>
+          <span>+7 (927) 495-55-35</span>
+        </a>
+        <button class="btn btn-primary btn-header" onclick="openBookingModal()">
+          Забронировать
+        </button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Открыть меню">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <line x1="3" y1="7" x2="21" y2="7"></line>
+            <line x1="3" y1="17" x2="21" y2="17"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Мобильное меню с крестиком в левом верхнем углу -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="mobile-drawer-topbar">
+      <button class="mobile-drawer-close" onclick="closeMobileMenu()" aria-label="Закрыть меню">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="brand-logo">
+        <span class="brand-logo-text" style="font-size: 1.3rem;">JOJO</span>
+        <span class="brand-logo-badge">Kazan</span>
+      </div>
+    </div>
+
+    <ul class="mobile-nav-list">
+      <li><a href="#interior" onclick="closeMobileMenu()">Интерьер</a></li>
+      <li><a href="#menu" onclick="closeMobileMenu()">Меню</a></li>
+      <li><a href="#about" onclick="closeMobileMenu()">О нас</a></li>
+      <li><a href="#floorplan" onclick="closeMobileMenu()">3D-схема столов</a></li>
+      <li><a href="#contacts" onclick="closeMobileMenu()">Контакты и карта</a></li>
+    </ul>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <p style="color: var(--text-beige);">г. Казань, ул. Чистопольская, 19Г</p>
+      <a href="tel:+79274955535" class="btn btn-call-green" style="width: 100%;" onclick="closeMobileMenu(); triggerPhoneCall(event);">
+        <span>Позвонить: +7 (927) 495-55-35</span>
+      </a>
+      <button class="btn btn-primary" style="width: 100%;" onclick="closeMobileMenu(); openBookingModal();">
+        Забронировать стол
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       1, 2, 3. HERO-БЛОК
+       ========================================== -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2000&q=85" alt="Интерьер зала JOJO в Казани" draggable="false" />
+    </div>
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-content">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-tag">
+            <span class="status-dot"></span>
+            <span>Modern Lounge · Specialty Coffee · Kitchen</span>
+          </div>
+
+          <h1 class="hero-logo-title">JO<span>J</span>O</h1>
+
+          <p class="hero-lead">
+            Пространство <strong>вечернего света, тёплого камня и гастрономии</strong> в Казани. 
+            Утренний specialty-кофе, авторская кухня и обволакивающая атмосфера современного городского лаунжа.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#menu" class="btn btn-primary">
+              <span>Меню</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+              </svg>
+            </a>
+            <button class="btn btn-secondary" onclick="openBookingModal()">
+              <span>Забронировать</span>
+            </button>
+            <a href="tel:+79274955535" class="btn btn-call-green" onclick="triggerPhoneCall(event)">
+              <span class="call-pulse-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </span>
+              <span>Позвонить</span>
+            </a>
+          </div>
+        </div>
+
+        <aside class="hero-lounge-widget">
+          <div class="widget-top">
+            <div class="widget-live-badge">
+              <span class="status-dot"></span>
+              <span>Сейчас в JOJO</span>
+            </div>
+            <div class="sound-wave" title="Атмосферный лаунж-саунд">
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <div class="widget-stats">
+            <div class="widget-stat-box">
+              <div class="widget-stat-label">Свет и вайб</div>
+              <div class="widget-stat-val">Warm Lounge 2700K</div>
+            </div>
+            <div class="widget-stat-box">
+              <div class="widget-stat-label">Посадка в зале</div>
+              <div class="widget-stat-val" style="color: var(--accent-beige);">Свободно 5 столов</div>
+            </div>
+          </div>
+
+          <a href="tel:+79274955535" class="widget-call-box" onclick="triggerPhoneCall(event)">
+            <div>
+              <div style="font-size: 0.75rem; color: var(--text-beige); text-transform: uppercase; letter-spacing: 0.1em;">Прямая связь с хостес</div>
+              <div style="font-family: var(--font-display); font-size: 1.05rem; color: var(--text-white); margin-top: 2px;">+7 (927) 495-55-35</div>
+            </div>
+            <span class="call-pulse-icon" style="width: 42px; height: 42px; background-color: var(--accent-beige); color: #111312;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </span>
+          </a>
+        </aside>
+      </div>
+
+      <div class="hero-bottom-bar">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Локация</span>
+          <span class="hero-meta-value">Казань, ул. Чистопольская, 19Г (м. Козья слобода)</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Режим работы</span>
+          <span class="hero-meta-value">Пн–Чт, Вс: 11:00 – 00:00 · Пт–Сб: 11:00 – 02:00</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Быстрый звонок</span>
+          <span class="hero-meta-value"><a href="tel:+79274955535" onclick="triggerPhoneCall(event)" style="color: var(--accent-beige);">+7 (927) 495-55-35 — Открыть «Телефон» ↗</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       4. РАЗДЕЛ С ФОТОГРАФИЯМИ ИНТЕРЬЕРА (4 ЗОНЫ JOJO)
+       ========================================== -->
+  <section class="section reveal" id="interior">
+    <div class="container">
+      <div class="section-header row-between">
+        <div>
+          <span class="eyebrow">Архитектура и свет</span>
+          <h2 class="section-title">Атмосфера <span class="serif-italic">вечернего</span> уюта</h2>
+        </div>
+
+        <div class="filter-pills" id="interiorFilters">
+          <button class="filter-pill active" data-zone="all">Все зоны</button>
+          <button class="filter-pill" data-zone="lounge">Вечерний лаунж</button>
+          <button class="filter-pill" data-zone="bar">Кофейный и контактный бар</button>
+          <button class="filter-pill" data-zone="details">Материалы и свет</button>
+        </div>
+      </div>
+
+      <div class="interior-grid" id="interiorGrid">
+        <!-- Карточка 1 -->
+        <article class="interior-card span-7" data-zone="lounge">
+          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1400&q=85" alt="Основной зал JOJO Казань" loading="lazy" draggable="false" />
+          <div class="interior-card-overlay">
+            <span class="interior-zone-badge">Основной лаунж</span>
+            <h3 class="interior-card-title">Панорамный зал и мягкие кресла</h3>
+            <p class="interior-card-desc">Вид на Чистопольскую, обволакивающая посадка и фирменный стиль JOJO KAZAN</p>
+          </div>
+        </article>
+
+        <!-- Карточка 2 -->
+        <article class="interior-card span-5" data-zone="bar">
+          <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=85" alt="Контактный бар JOJO" loading="lazy" draggable="false" />
+          <div class="interior-card-overlay">
+            <span class="interior-zone-badge">Барная станция</span>
+            <h3 class="interior-card-title">Бар со скальной фактурой</h3>
+            <p class="interior-card-desc">Рельефный камень с нижней подсветкой, specialty-кофе и каскадная зелень</p>
+          </div>
+        </article>
+
+        <!-- Карточка 3 -->
+        <article class="interior-card span-5" data-zone="details">
+          <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=85" alt="Детали интерьера и зелень JOJO" loading="lazy" draggable="false" />
+          <div class="interior-card-overlay">
+            <span class="interior-zone-badge">Материалы и свет</span>
+            <h3 class="interior-card-title">Оазис зелени и тёплые огни</h3>
+            <p class="interior-card-desc">Велюровые кресла изумрудного оттенка, тропические растения и авторская роспись</p>
+          </div>
+        </article>
+
+        <!-- Карточка 4 -->
+        <article class="interior-card span-7" data-zone="lounge">
+          <img src="https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1400&q=85" alt="Диванная зона и арочные зеркала JOJO" loading="lazy" draggable="false" />
+          <div class="interior-card-overlay">
+            <span class="interior-zone-badge">Вечерний лаунж</span>
+            <h3 class="interior-card-title">Мягкие диванные ложи и световые арки</h3>
+            <p class="interior-card-desc">Комфортная посадка для компаний, линейный свет и акцентные зеркальные арки</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       5. РАЗДЕЛ МЕНЮ
+       ========================================== -->
+  <section class="section menu-section reveal" id="menu">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Гастрономия и кофейный бар</span>
+          <h2 class="section-title">Авторское <span class="serif-italic">меню</span> JOJO</h2>
+        </div>
+
+        <div class="menu-tabs" id="menuTabs">
+          <button class="menu-tab active" data-category="main">Основное меню</button>
+          <button class="menu-tab" data-category="lunch">Обеды и ланчи</button>
+          <button class="menu-tab" data-category="breakfast">Завтраки и бранчи</button>
+          <button class="menu-tab" data-category="coffee">Specialty Кофе</button>
+          <button class="menu-tab" data-category="bar">Авторский бар</button>
+          <button class="menu-tab" data-category="desserts">Десерты</button>
+        </div>
+      </div>
+
+      <div class="menu-grid" id="menuGrid"></div>
+
+      <div class="preorder-bar" id="preorderBar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span class="status-dot"></span>
+          <span>Выбрано блюд к столу: <strong id="preorderCount">0</strong> на сумму <strong id="preorderTotal">0 ₽</strong></span>
+        </div>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="tel:+79274955535" class="btn btn-call-green" onclick="triggerPhoneCall(event)">
+            Позвонить и заказать
+          </a>
+          <button class="btn btn-primary" onclick="openBookingModal()">
+            Забронировать со столом
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       6. РАЗДЕЛ «О НАС» (БЕЗ СЛОВ КОМАНДЫ JOJO)
+       ========================================== -->
+  <section class="section reveal" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="about-main-img">
+            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=85" alt="Интерьер JOJO Казань" loading="lazy" draggable="false" />
+          </div>
+        </div>
+
+        <div class="about-text-block">
+          <span class="eyebrow">О проекте JOJO</span>
+          <h2 class="section-title" style="margin: 12px 0 24px;">
+            Городской лаунж <span class="serif-italic">нового</span> формата на Чистопольской
+          </h2>
+
+          <p>
+            <strong>JOJO</strong> на улице Чистопольская, 19Г — это гармоничный симбиоз дневной specialty-кофейни, полноценного ресторана авторской кухни и стильного вечернего лаунжа в Казани.
+          </p>
+          <p>
+            В интерьере соединились рельефный камень, глубокие велюровые кресла и диваны, каскадная живая зелень и авторская каллиграфия. Днём панорамные окна создают идеальную среду для деловых обедов и бранчей, а вечером включается камерный сценарий освещения.
+          </p>
+
+          <div class="about-features">
+            <div class="feature-box">
+              <div class="feature-num">Specialty 100%</div>
+              <div class="feature-title">Кофейный и чайный бар</div>
+              <div class="feature-text">Зерно свежей обжарки, авторские рафы, церемониальная матча и редкие чаи.</div>
+            </div>
+            <div class="feature-box">
+              <div class="feature-num">Urban Lounge</div>
+              <div class="feature-title">Вечерняя атмосфера</div>
+              <div class="feature-text">Премиальная акустика, глубокая мягкая посадка и продуманный сервис.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       7, 8. КОНТАКТЫ, КАРТА И ИНТЕРАКТИВНАЯ 3D-СХЕМА СТОЛОВ
+       ========================================== -->
+  <section class="section reveal" id="contacts" style="padding-top: 30px;">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Локация и прямая связь</span>
+        <h2 class="section-title">Контакты и <span class="serif-italic">расположение</span></h2>
+      </div>
+
+      <div class="contacts-map-grid">
+        <div class="info-card">
+          <div class="contact-list">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </div>
+              <div>
+                <div class="contact-label">Адрес в Казани</div>
+                <div class="contact-val">ул. Чистопольская, 19Г</div>
+                <div class="contact-sub">м. «Козья слобода» · Удобный подъезд и парковка</div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div style="width: 100%;">
+                <div class="contact-label">Время работы</div>
+                <table class="hours-table">
+                  <tr>
+                    <td>Понедельник – Четверг</td>
+                    <td>11:00 – 00:00</td>
+                  </tr>
+                  <tr>
+                    <td>Пятница – Суббота</td>
+                    <td>11:00 – 02:00</td>
+                  </tr>
+                  <tr>
+                    <td>Воскресенье</td>
+                    <td>11:00 – 00:00</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="contact-label">Прямой телефон хостес</div>
+                <div class="contact-val">
+                  <a href="tel:+79274955535" onclick="triggerPhoneCall(event)">+7 (927) 495-55-35</a>
+                </div>
+                <div class="contact-sub">При нажатии сразу открывается приложение «Телефон»</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <a href="tel:+79274955535" class="btn btn-call-green" style="flex: 1;" onclick="triggerPhoneCall(event)">
+              <span class="call-pulse-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </span>
+              <span>Позвонить в JOJO</span>
+            </a>
+            <button class="btn btn-primary" style="flex: 1;" onclick="openBookingModal()">
+              Забронировать онлайн
+            </button>
+          </div>
+        </div>
+
+        <div class="map-card">
+          <div class="map-canvas">
+            <iframe 
+              class="map-iframe"
+              title="Карта расположения JOJO в Казани — ул. Чистопольская, 19Г"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=49.0920%2C55.8140%2C49.1180%2C55.8260&amp;layer=mapnik&amp;marker=55.8202%2C49.1048"
+              loading="lazy">
+            </iframe>
+
+            <div class="map-floating-overlay">
+              <div class="map-pin-badge">
+                <span class="pin-pulse"></span>
+                <div>
+                  <div style="font-weight: 600; color: var(--text-white); font-size: 0.96rem;">JOJO · Чистопольская, 19Г</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Казань · Открыто ежедневно с 11:00</div>
+                </div>
+              </div>
+              <div class="map-route-links">
+                <a href="https://yandex.ru/maps/org/jojo/20078198778/" target="_blank" rel="noopener" class="route-chip">
+                  Яндекс Карты ↗
+                </a>
+                <a href="https://2gis.ru/kazan/search/Чистопольская%2019г" target="_blank" rel="noopener" class="route-chip">
+                  2ГИС ↗
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Интерактивный выбор столика + ЧИСТАЯ 3D-МЕСТНОСТЬ ЗАЛА -->
+      <div class="floorplan-card" id="floorplan">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <span class="eyebrow">Интерактивная 3D-схема зала</span>
+            <h3 style="font-family: var(--font-display); font-size: 1.55rem; font-weight: 500; margin-top: 8px;">
+              Выберите свой стол в 3D-пространстве JOJO
+            </h3>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Нажмите на любой стол — 3D-камера покажет его расположение в зале
+          </p>
+        </div>
+
+        <div class="floorplan-layout">
+          <div>
+            <!-- Кнопки выбора столиков -->
+            <div class="tables-scheme" id="tablesScheme">
+              <div class="scheme-window-label">Панорамные окна на ул. Чистопольская</div>
+
+              <div class="table-spot selected" data-id="1" data-table="Стол №1 (У панорамного окна, 2 гостя)">
+                <span class="table-spot-name">Стол №1</span>
+                <span class="table-spot-meta">У окна · 2 персоны</span>
+              </div>
+              <div class="table-spot" data-id="2" data-table="Стол №2 (У панорамного окна, 2–3 гостя)">
+                <span class="table-spot-name">Стол №2</span>
+                <span class="table-spot-meta">У окна · 2–3 персоны</span>
+              </div>
+              <div class="table-spot" data-id="3" data-table="Стол №3 (Угловой лаунж у окна, 4 гостя)">
+                <span class="table-spot-name">Стол №3</span>
+                <span class="table-spot-meta">Угловой · 4 персоны</span>
+              </div>
+              <div class="table-spot" data-id="4" data-table="Ложа №4 (Мягкие диваны в центре, 4 гостя)">
+                <span class="table-spot-name">Ложа №4</span>
+                <span class="table-spot-meta">Диваны · 4 персоны</span>
+              </div>
+              <div class="table-spot" data-id="5" data-table="Ложа №5 (Вечерний лаунж, 4–6 гостей)">
+                <span class="table-spot-name">Ложа №5</span>
+                <span class="table-spot-meta">Лаунж · 4–6 персон</span>
+              </div>
+              <div class="table-spot" data-id="6" data-table="VIP-стол №6 (Приватная зона, 6–8 гостей)">
+                <span class="table-spot-name">VIP №6</span>
+                <span class="table-spot-meta">Компания · 6–8 персон</span>
+              </div>
+            </div>
+
+            <!-- 3D-МЕСТНОСТЬ ВЫБРАННОГО СТОЛИКА (БЕЗ ФОТО С МЕСТА СТОЛА) -->
+            <div class="hall-3d-wrapper" id="hall3dWrapper">
+              <div class="hall-3d-topbar">
+                <div class="hall-3d-badge">
+                  <span class="status-dot"></span>
+                  <span id="hall3dStatusTitle">3D-местность: Стол №1</span>
+                </div>
+                <div class="hall-3d-controls">
+                  <button type="button" class="hall-3d-btn" onclick="reset3DCamera()">
+                    Сбросить камеру (Общий 3D-план)
+                  </button>
+                </div>
+              </div>
+
+              <div class="hall-3d-viewport" id="hallViewport" title="Потяните мышью или пальцем для вращения 3D-зала">
+                <div class="hall-3d-scene" id="hallScene">
+                  <div class="hall-floor">
+                    <!-- Панорамное остекление -->
+                    <div class="hall-wall-window"></div>
+
+                    <!-- Контактный бар -->
+                    <div class="hall-bar-counter">Контактный бар · Камень</div>
+
+                    <!-- Озеленение -->
+                    <div class="hall-plant" style="top: 112px; left: 26px;"></div>
+                    <div class="hall-plant" style="top: 112px; right: 26px;"></div>
+                    <div class="hall-plant" style="bottom: 26px; left: 205px;"></div>
+
+                    <!-- 3D Столики -->
+                    <div class="node-table-3d t3d-1 active-3d" data-id="1" onclick="selectTableById('1')">
+                      <span class="table-3d-pin">Стол №1</span>
+                      <span class="table-3d-sub">У окна · 2 перс.</span>
+                    </div>
+
+                    <div class="node-table-3d t3d-2" data-id="2" onclick="selectTableById('2')">
+                      <span class="table-3d-pin">Стол №2</span>
+                      <span class="table-3d-sub">Панорама · 2–3</span>
+                    </div>
+
+                    <div class="node-table-3d t3d-3" data-id="3" onclick="selectTableById('3')">
+                      <span class="table-3d-pin">Стол №3</span>
+                      <span class="table-3d-sub">Угловой · 4 перс.</span>
+                    </div>
+
+                    <div class="node-table-3d t3d-4" data-id="4" onclick="selectTableById('4')">
+                      <span class="table-3d-pin">Ложа №4</span>
+                      <span class="table-3d-sub">Диваны · 4 перс.</span>
+                    </div>
+
+                    <div class="node-table-3d t3d-5" data-id="5" onclick="selectTableById('5')">
+                      <span class="table-3d-pin">Ложа №5</span>
+                      <span class="table-3d-sub">Лаунж · 4–6</span>
+                    </div>
+
+                    <div class="node-table-3d t3d-6" data-id="6" onclick="selectTableById('6')">
+                      <span class="table-3d-pin">VIP-ложа №6</span>
+                      <span class="table-3d-sub">Приват · 6–8 перс.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hall-3d-hud">
+                <div>
+                  <div class="hud-zone-title" id="hudZoneTitle">Стол №1 · Первая линия у панорамного окна</div>
+                  <div class="hud-zone-desc" id="hudZoneDesc">Вид на ул. Чистопольская, глубокие мягкие кресла и подвесная зелень с тёплым светом.</div>
+                </div>
+                <div class="hud-tags" id="hudZoneTags">
+                  <span class="hud-tag">Панорамный вид</span>
+                  <span class="hud-tag">Для двоих</span>
+                  <span class="hud-tag">Розетка 220V</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <form onsubmit="handleBookingSubmit(event)" style="display: flex; flex-direction: column; gap: 14px; background-color: rgba(13, 15, 14, 0.55); padding: 28px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <div class="form-group">
+              <label class="form-label">Выбранная 3D-локация в зале</label>
+              <input type="text" id="selectedTableInput" class="form-control" value="Стол №1 (У панорамного окна, 2 гостя)" readonly style="color: var(--accent-beige); font-weight: 600;" />
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Ваше имя</label>
+                <input type="text" class="form-control" placeholder="Александр" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Дата и время</label>
+                <input type="text" class="form-control" value="Сегодня, 20:00" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Телефон для подтверждения</label>
+              <input type="tel" class="form-control" placeholder="+7 (999) 000-00-00" required />
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap;">
+              <button type="submit" class="btn btn-primary" style="flex: 1;">
+                Забронировать этот стол
+              </button>
+              <a href="tel:+79274955535" class="btn btn-call-green" onclick="triggerPhoneCall(event)">
+                Позвонить
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       9. НИЖНИЙ ФУТЕР
+       ========================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <a href="#" class="brand-logo">
+            <span class="brand-logo-text">JOJO</span>
+            <span class="brand-logo-badge">Kazan</span>
+          </a>
+          <p class="footer-brand-desc">
+            Современная кофейня, ресторан и городской лаунж в Казани. Вечерний свет, благородные фактуры и авторская гастрономия.
+          </p>
+          <div class="social-links">
+            <a href="https://t.me/" target="_blank" rel="noopener" class="social-btn">Telegram</a>
+            <a href="https://vk.com/" target="_blank" rel="noopener" class="social-btn">VK</a>
+            <a href="https://wa.me/79274955535" target="_blank" rel="noopener" class="social-btn">WhatsApp</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Разделы</div>
+          <ul class="footer-links">
+            <li><a href="#interior">Интерьер и атмосфера</a></li>
+            <li><a href="#menu">Меню и барная карта</a></li>
+            <li><a href="#about">О концепции JOJO</a></li>
+            <li><a href="#floorplan">3D-схема столов</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Сервис</div>
+          <ul class="footer-links">
+            <li><a href="#floorplan">Онлайн-бронирование</a></li>
+            <li><a href="tel:+79274955535" onclick="triggerPhoneCall(event)">Звонок хостес</a></li>
+            <li><a href="#menu">Предзаказ блюд к столу</a></li>
+            <li><a href="#contacts">Маршрут на карте</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Контакты</div>
+          <ul class="footer-links">
+            <li style="color: var(--text-cream);">г. Казань, ул. Чистопольская, 19Г</li>
+            <li>
+              <a href="tel:+79274955535" onclick="triggerPhoneCall(event)" style="color: var(--accent-beige); font-weight: 600; font-size: 1.05rem;">
+                +7 (927) 495-55-35
+              </a>
+            </li>
+            <li>Пн–Чт, Вс: 11:00 – 00:00</li>
+            <li>Пт–Сб: 11:00 – 02:00</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-watermark">JOJO KAZAN</div>
+
+      <div class="footer-bottom">
+        <span>© 2026 JOJO Lounge & Kitchen Казань. Все права защищены.</span>
+        <span>Политика конфиденциальности · Публичная оферта</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Фиксированная нижняя панель на смартфонах -->
+  <nav class="mobile-bottom-dock" aria-label="Быстрые действия">
+    <a href="tel:+79274955535" class="dock-item dock-call" onclick="triggerPhoneCall(event)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+      <span>Позвонить</span>
+    </a>
+    <a href="#menu" class="dock-item dock-menu">Меню</a>
+    <button class="dock-item dock-book" onclick="openBookingModal()">Бронь</button>
+  </nav>
+
+  <!-- ЭКРАН ТЕЛЕФОННОГО ВЫЗОВА -->
+  <div class="modal-backdrop" id="callModal" onclick="if(event.target === this) closeCallModal()">
+    <div class="modal-box phone-call-card">
+      <button class="modal-close" onclick="closeCallModal()" aria-label="Закрыть">✕</button>
+
+      <div class="caller-avatar">JOJO</div>
+      <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent-beige);">
+        Переход в приложение «Телефон»
+      </div>
+      <div class="phone-number-display">+7 (927) 495-55-35</div>
+      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 18px;">
+        Хостес JOJO Казань · Чистопольская, 19Г
+      </p>
+
+      <a href="tel:+79274955535" class="call-action-btn-big">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        <span>Вызвать через «Телефон»</span>
+      </a>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;">
+        <button class="btn btn-secondary" style="padding: 12px; font-size: 0.82rem;" onclick="copyPhoneNumber()">
+          Скопировать номер
+        </button>
+        <a href="https://wa.me/79274955535" target="_blank" rel="noopener" class="btn btn-secondary" style="padding: 12px; font-size: 0.82rem;">
+          Написать в WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно бронирования -->
+  <div class="modal-backdrop" id="bookingModal" onclick="if(event.target === this) closeBookingModal()">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeBookingModal()" aria-label="Закрыть">✕</button>
+      <span class="eyebrow">Резерв стола</span>
+      <h3 style="font-family: var(--font-display); font-size: 1.45rem; margin: 10px 0 8px;">Забронировать визит в JOJO</h3>
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">
+        Казань, ул. Чистопольская, 19Г · Или позвоните нам напрямую: <a href="tel:+79274955535" style="color: var(--accent-beige); font-weight: 600;">+7 (927) 495-55-35</a>
+      </p>
+
+      <div id="modalPreorderSummary" style="display:none; margin-bottom: 16px; padding: 12px 16px; border-radius: var(--radius-sm); background-color: rgba(39,56,47,0.45); border: 1px solid rgba(110,136,120,0.4); font-size: 0.85rem; color: var(--text-cream);"></div>
+
+      <form onsubmit="handleBookingSubmit(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="form-group">
+          <label class="form-label">Ваше имя</label>
+          <input type="text" class="form-control" placeholder="Введите имя" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Номер телефона</label>
+          <input type="tel" class="form-control" placeholder="+7 (___) ___-__-__" required />
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Дата и время</label>
+            <input type="text" class="form-control" value="Сегодня, 20:00" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Гости</label>
+            <select class="form-control">
+              <option>2 гостя</option>
+              <option>3–4 гостя</option>
+              <option>5–6 гостей</option>
+              <option>Компания 7+ гостей</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 6px;">
+          Подтвердить бронирование
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Уведомление -->
+  <div class="toast-notification" id="toast">
+    <span class="status-dot"></span>
+    <span id="toastText">Заявка принята! Администратор JOJO свяжется с вами.</span>
+  </div>
+
+  <!-- ==========================================
+       СКРИПТЫ
+       ========================================== -->
+  <script>
+    // Защита всех фото от контекстного меню и перетаскивания
+    document.addEventListener('contextmenu', e => {
+      if (e.target.tagName === 'IMG') e.preventDefault();
+    });
+    document.addEventListener('dragstart', e => {
+      if (e.target.tagName === 'IMG') e.preventDefault();
+    });
+
+    function triggerPhoneCall(e) {
+      document.getElementById('callModal').classList.add('open');
+      window.location.href = 'tel:+79274955535';
+    }
+
+    function closeCallModal() {
+      document.getElementById('callModal').classList.remove('open');
+    }
+
+    function copyPhoneNumber() {
+      navigator.clipboard.writeText('+79274955535');
+      showToast('Номер +7 (927) 495-55-35 скопирован в буфер обмена');
+    }
+
+    // Данные 3D-местности для каждого столика (только 3D-координаты и описание, без фото)
+    const tables3DData = {
+      '1': {
+        fullName: 'Стол №1 (У панорамного окна, 2 гостя)',
+        title: 'Стол №1 · Первая линия у панорамного окна',
+        desc: 'Вид на ул. Чистопольская, глубокие мягкие кресла и подвесная зелень с тёплым светом.',
+        tags: ['Панорамный вид', 'Для двоих', 'Розетка 220V'],
+        cam: { rotX: 62, rotZ: -28, tx: 90, ty: 55, scale: 1.12 }
+      },
+      '2': {
+        fullName: 'Стол №2 (У панорамного окна, 2–3 гостя)',
+        title: 'Стол №2 · Центральная панорама зала',
+        desc: 'Круглый стол с объёмными велюровыми креслами у панорамного окна и видом на неон JOJO KAZAN.',
+        tags: ['Центр панорамы', '2–3 персоны', 'Естественный свет'],
+        cam: { rotX: 60, rotZ: -5, tx: 0, ty: 60, scale: 1.12 }
+      },
+      '3': {
+        fullName: 'Стол №3 (Угловой лаунж у окна, 4 гостя)',
+        title: 'Стол №3 · Угловой оазис с тропической зеленью',
+        desc: 'Уютная посадка в изумрудных креслах в окружении живых растений и тёплых гирлянд под потолком.',
+        tags: ['Угловая зона', 'До 4 гостей', 'Живая зелень'],
+        cam: { rotX: 62, rotZ: 22, tx: -95, ty: 55, scale: 1.12 }
+      },
+      '4': {
+        fullName: 'Ложа №4 (Мягкие диваны в центре, 4 гостя)',
+        title: 'Ложа №4 · Посадка у каменного контактного бара',
+        desc: 'Мягкие кресла и диваны рядом с рельефной каменной барной стойкой и фитостеной с неоном.',
+        tags: ['Рядом с баром', '4 персоны', 'Каменная фактура'],
+        cam: { rotX: 56, rotZ: -16, tx: 45, ty: -10, scale: 1.15 }
+      },
+      '5': {
+        fullName: 'Ложа №5 (Вечерний лаунж, 4–6 гостей)',
+        title: 'Ложа №5 · Изумрудные диваны и арочные зеркала',
+        desc: 'Просторный стол вдоль мягкого велюрового дивана под линейным архитектурным светом.',
+        tags: ['4–6 персон', 'Мягкие диваны', 'Зеркальные арки'],
+        cam: { rotX: 56, rotZ: 18, tx: -45, ty: -10, scale: 1.15 }
+      },
+      '6': {
+        fullName: 'VIP-стол №6 (Приватная зона, 6–8 гостей)',
+        title: 'VIP-ложа №6 · Приватная зона для компаний',
+        desc: 'Большая диванная зона в глубине зала для дней рождений, встреч друзей и закрытых ужинов.',
+        tags: ['Приватная ложа', '6–8 гостей', 'Премиум-сервис'],
+        cam: { rotX: 54, rotZ: 28, tx: -85, ty: -65, scale: 1.14 }
+      }
+    };
+
+    let currentRotX = 58;
+    let currentRotZ = -18;
+    let currentTx = 0;
+    let currentTy = 0;
+    let currentScale = 0.95;
+
+    function applySceneTransform() {
+      const scene = document.getElementById('hallScene');
+      const isMobile = window.innerWidth <= 768;
+      const mobileFactor = isMobile ? 0.72 : 1;
+      scene.style.transform = `translate3d(${currentTx * mobileFactor}px, ${currentTy * mobileFactor}px, 0) rotateX(${currentRotX}deg) rotateZ(${currentRotZ}deg) scale(${currentScale * mobileFactor})`;
+    }
+
+    function selectTableById(id) {
+      const data = tables3DData[id];
+      if (!data) return;
+
+      document.querySelectorAll('.table-spot').forEach(spot => {
+        spot.classList.toggle('selected', spot.dataset.id === String(id));
+      });
+
+      document.querySelectorAll('.node-table-3d').forEach(node => {
+        node.classList.toggle('active-3d', node.dataset.id === String(id));
+      });
+
+      document.getElementById('selectedTableInput').value = data.fullName;
+
+      document.getElementById('hall3dStatusTitle').textContent = `3D-местность: Стол №${id}`;
+      document.getElementById('hudZoneTitle').textContent = data.title;
+      document.getElementById('hudZoneDesc').textContent = data.desc;
+      document.getElementById('hudZoneTags').innerHTML = data.tags.map(t => `<span class="hud-tag">${t}</span>`).join('');
+
+      currentRotX = data.cam.rotX;
+      currentRotZ = data.cam.rotZ;
+      currentTx = data.cam.tx;
+      currentTy = data.cam.ty;
+      currentScale = data.cam.scale;
+      applySceneTransform();
+    }
+
+    function reset3DCamera() {
+      currentRotX = 58;
+      currentRotZ = -18;
+      currentTx = 0;
+      currentTy = 0;
+      currentScale = 0.95;
+      applySceneTransform();
+    }
+
+    // Свободное вращение 3D-зала мышью или пальцем
+    (function init3DDrag() {
+      const viewport = document.getElementById('hallViewport');
+      const scene = document.getElementById('hallScene');
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+
+      const startDrag = (clientX, clientY) => {
+        isDragging = true;
+        startX = clientX;
+        startY = clientY;
+        scene.classList.add('dragging');
+      };
+
+      const moveDrag = (clientX, clientY) => {
+        if (!isDragging) return;
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+        startX = clientX;
+        startY = clientY;
+
+        currentRotZ = Math.max(-75, Math.min(75, currentRotZ + dx * 0.35));
+        currentRotX = Math.max(35, Math.min(72, currentRotX - dy * 0.25));
+        applySceneTransform();
+      };
+
+      const endDrag = () => {
+        isDragging = false;
+        scene.classList.remove('dragging');
+      };
+
+      viewport.addEventListener('mousedown', e => startDrag(e.clientX, e.clientY));
+      window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+      window.addEventListener('mouseup', endDrag);
+
+      viewport.addEventListener('touchstart', e => {
+        if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      window.addEventListener('touchmove', e => {
+        if (isDragging && e.touches.length === 1) moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      window.addEventListener('touchend', endDrag);
+    })();
+
+    // База блюд по всем категориям
+    const menuData = {
+      main: [
+        {
+          id: 'm1',
+          title: 'Филе миньон с кремом из печёного сельдерея',
+          desc: 'Мраморная говядина прожарки medium, демиглас на чёрной смородине, вешенки на гриле и трюфельное масло.',
+          weight: '290 г',
+          price: 1390,
+          badge: 'Хит JOJO',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'm2',
+          title: 'Тальятелле с тигровыми креветками и биском',
+          desc: 'Домашняя паста со сливочным соусом биск, томатами конкассе, базиликом и выдержанным пармезаном.',
+          weight: '310 г',
+          price: 890,
+          badge: 'Авторское',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'm3',
+          title: 'Утиная грудка су-вид с пряной грушей',
+          desc: 'Нежное филе утки с карамелизированной грушей в кардамоне, пюре из батата и соусом порто.',
+          weight: '270 г',
+          price: 980,
+          badge: 'Вечернее меню',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'm4',
+          title: 'Тёплый салат с ростбифом и печёным перцем',
+          desc: 'Тонкие слайсы маринованного ростбифа, микс молодых салатов, кедровый орех и медово-зернистая заправка.',
+          weight: '240 г',
+          price: 760,
+          badge: 'Популярное',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'm5',
+          title: 'Филе лосося с зелёным ризотто и спаржей',
+          desc: 'Обжаренный лосось с хрустящей корочкой, кремовое ризотто со шпинатом и лимонным конфи.',
+          weight: '280 г',
+          price: 1240,
+          badge: 'Шеф рекомендует',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'm6',
+          title: 'Тартар из говядины с бриошью и пармезаном',
+          desc: 'Рубленая вырезка с каперсами, красным луком, трюфельным айоли и тёплой ремесленной бриошью.',
+          weight: '210 г',
+          price: 790,
+          badge: 'К вину и бару',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'
+        }
+      ],
+      lunch: [
+        {
+          id: 'l1',
+          title: 'Томлёные говяжьи щёчки с трюфельным пюре',
+          desc: 'Нежные щёчки 12-часового томления в соусе демиглас с воздушным картофельным пюре и луком фри.',
+          weight: '310 г',
+          price: 740,
+          badge: 'Обед 12:00–16:00',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'l2',
+          title: 'Крем-суп из лесных белых грибов с тартином',
+          desc: 'Бархатистый суп из белых грибов и шампиньонов со сливками, трюфельным маслом и хрустящим хлебом.',
+          weight: '290 г',
+          price: 490,
+          badge: 'Сытный ланч',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'l3',
+          title: 'Боул с запечённым лососем, киноа и эдамаме',
+          desc: 'Сбалансированный дневной боул с лососем терияки, спелым авокадо, киноа, бобами эдамаме и кунжутным соусом.',
+          weight: '320 г',
+          price: 680,
+          badge: 'Лёгкий обед',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80'
+        }
+      ],
+      breakfast: [
+        {
+          id: 'b1',
+          title: 'Ремесленный тартин с лососем и гуакамоле',
+          desc: 'Хрустящий хлеб на закваске, спелый авокадо, слабосолёный лосось, два яйца пашот и соус голландез.',
+          weight: '260 г',
+          price: 690,
+          badge: 'Бранч до 16:00',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'b2',
+          title: 'Сырники из рикотты с ванильным англезом',
+          desc: 'Воздушные сырники без лишней муки с соусом из бурбонской ванили, свежей голубикой и фисташкой.',
+          weight: '220 г',
+          price: 540,
+          badge: 'Хит утра',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'b3',
+          title: 'Бриошь с пастрами, скрэмблом и трюфелем',
+          desc: 'Сливочный скрэмбл на поджаренной бриоши с домашней пастрами из говядины и выдержанным чеддером.',
+          weight: '275 г',
+          price: 650,
+          badge: 'Сытный завтрак',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=800&q=80'
+        }
+      ],
+      coffee: [
+        {
+          id: 'c1',
+          title: 'Раф «Солёная фисташка & Шалфей»',
+          desc: 'Фирменный сливочный раф на двойном ристретто с натуральной пастой иранской фисташки и нотой шалфея.',
+          weight: '300 мл',
+          price: 420,
+          badge: 'Signature JOJO',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'c2',
+          title: 'Флэт Уайт (Эфиопия / Колумбия)',
+          desc: 'Насыщенный кофейный вкус с бархатистой микропеной и нотами тёмного шоколада, бергамота и лесного ореха.',
+          weight: '200 мл',
+          price: 330,
+          badge: 'Specialty 100%',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'c3',
+          title: 'Церемониальная Матча Латте на кокосе',
+          desc: 'Японская матча премиального грейда Удзи, взбитая на органическом кокосовом молоке без сахара.',
+          weight: '300 мл',
+          price: 390,
+          badge: 'Без сахара',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=800&q=80'
+        }
+      ],
+      bar: [
+        {
+          id: 'dr1',
+          title: 'Ботанический микс «Хвоя, Груша & Бергамот»',
+          desc: 'Освежающий авторский коктейль на кордиале из пихты, печёной груши Вильямс и сухого тоника.',
+          weight: '280 мл',
+          price: 560,
+          badge: 'Авторский бар',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'dr2',
+          title: 'Smoky Vetiver Sour',
+          desc: 'Вечерний коктейль с древесно-дымным профилем, цитрусовой кислинкой юдзу и нежной текстурой.',
+          weight: '180 мл',
+          price: 680,
+          badge: 'Хит вечера',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'dr3',
+          title: 'Согревающий чай «Печёное яблоко и чабрец»',
+          desc: 'Густой чайный настой на основе красного чая Ассам, карамельного яблока, корицы и горного чабреца.',
+          weight: '600 мл',
+          price: 520,
+          badge: 'На двоих',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=800&q=80'
+        }
+      ],
+      desserts: [
+        {
+          id: 'd1',
+          title: 'Баскский чизкейк «Сан-Себастьян» с бельгийским шоколадом',
+          desc: 'Кремовая текстура с карамелизированной корочкой и подачей тёплого тёмного ганаша.',
+          weight: '180 г',
+          price: 520,
+          badge: 'Бестселлер',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'd2',
+          title: 'Фисташковый тарт с малиновым кули',
+          desc: 'Тонкое миндально-песочное тесто, заварной фисташковый крем и свежая малина.',
+          weight: '150 г',
+          price: 490,
+          badge: 'Ручная работа',
+          badgeType: 'green',
+          img: 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'd3',
+          title: 'Трюфельный мусс из тёмного шоколада и фундука',
+          desc: 'Десерт с бархатным муссом 70% какао, пралине из пьемонтского фундука и хлопьями морской соли.',
+          weight: '160 г',
+          price: 540,
+          badge: 'Вечерний десерт',
+          badgeType: 'default',
+          img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80'
+        }
+      ]
+    };
+
+    const selectedDishes = new Map();
+    let currentCategory = 'main';
+
+    function renderMenu(category) {
+      currentCategory = category;
+      const grid = document.getElementById('menuGrid');
+      const items = menuData[category] || [];
+      grid.innerHTML = items.map(item => {
+        const isAdded = selectedDishes.has(item.id);
+        return `
+          <article class="dish-card" onmousemove="handleCardSpotlight(event, this)">
+            <div class="dish-image-wrap">
+              <img src="${item.img}" alt="${item.title}" loading="lazy" draggable="false" />
+              <span class="dish-badge ${item.badgeType === 'green' ? 'green' : ''}">${item.badge}</span>
+              <span class="dish-weight">${item.weight}</span>
+            </div>
+            <div class="dish-body">
+              <div>
+                <h3 class="dish-title">${item.title}</h3>
+                <p class="dish-desc">${item.desc}</p>
+              </div>
+              <div class="dish-footer">
+                <span class="dish-price">${item.price.toLocaleString('ru-RU')} ₽</span>
+                <button class="dish-add-btn ${isAdded ? 'added' : ''}" onclick="toggleDish('${category}', '${item.id}')">
+                  <span>${isAdded ? '✓ В предзаказе' : '+ К столику'}</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function handleCardSpotlight(e, card) {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+    }
+
+    function toggleDish(category, id) {
+      const item = menuData[category].find(d => d.id === id);
+      if (!item) return;
+
+      if (selectedDishes.has(id)) {
+        selectedDishes.delete(id);
+      } else {
+        selectedDishes.set(id, item);
+      }
+
+      renderMenu(currentCategory);
+      updatePreorderBar();
+    }
+
+    function updatePreorderBar() {
+      const bar = document.getElementById('preorderBar');
+      const countEl = document.getElementById('preorderCount');
+      const totalEl = document.getElementById('preorderTotal');
+      const modalSummary = document.getElementById('modalPreorderSummary');
+
+      let total = 0;
+      const names = [];
+      selectedDishes.forEach(item => {
+        total += item.price;
+        names.push(item.title);
+      });
+
+      countEl.textContent = selectedDishes.size;
+      totalEl.textContent = total.toLocaleString('ru-RU') + ' ₽';
+
+      if (selectedDishes.size > 0) {
+        bar.classList.add('visible');
+        modalSummary.style.display = 'block';
+        modalSummary.innerHTML = `<strong>Предзаказ к столу (${selectedDishes.size}):</strong> ${names.join(', ')} — <strong>${total.toLocaleString('ru-RU')} ₽</strong>`;
+      } else {
+        bar.classList.remove('visible');
+        modalSummary.style.display = 'none';
+      }
+    }
+
+    // Переключение категорий меню
+    document.getElementById('menuTabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('.menu-tab');
+      if (!btn) return;
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderMenu(btn.dataset.category);
+    });
+
+    // Интерактивный выбор стола на схеме (обновляет 3D-местность)
+    document.getElementById('tablesScheme').addEventListener('click', (e) => {
+      const spot = e.target.closest('.table-spot');
+      if (!spot) return;
+      selectTableById(spot.dataset.id);
+    });
+
+    // Фильтрация интерьера
+    document.getElementById('interiorFilters').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-pill');
+      if (!btn) return;
+      document.querySelectorAll('#interiorFilters .filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+
+      const zone = btn.dataset.zone;
+      document.querySelectorAll('#interiorGrid .interior-card').forEach(card => {
+        card.style.display = (zone === 'all' || card.dataset.zone === zone) ? 'block' : 'none';
+      });
+    });
+
+    function openBookingModal() {
+      document.getElementById('bookingModal').classList.add('open');
+    }
+    function closeBookingModal() {
+      document.getElementById('bookingModal').classList.remove('open');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastText').textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4200);
+    }
+
+    function handleBookingSubmit(e) {
+      e.preventDefault();
+      closeBookingModal();
+      showToast('Стол забронирован! Хостес JOJO свяжется с вами для подтверждения.');
+      e.target.reset();
+    }
+
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileDrawer.classList.toggle('open');
+    });
+    function closeMobileMenu() {
+      mobileDrawer.classList.remove('open');
+    }
+
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('header');
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    window.addEventListener('resize', applySceneTransform);
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    renderMenu('main');
+    selectTableById('1');
+  </script>
+</body>
+</html>
